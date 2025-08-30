@@ -1,0 +1,45 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: mirage_redis
+    restart: unless-stopped
+    networks:
+      - mirage-internal
+    volumes:
+      - redis_data:/data
+
+  controller:
+    build: ./controller
+    container_name: mirage_controller
+    env_file: .env
+    restart: unless-stopped
+    networks:
+      - mirage-internal
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+  gateway:
+    build: ./gateway
+    container_name: mirage_gateway
+    env_file: .env
+    restart: unless-stopped
+    networks:
+      - mirage-internal
+    ports:
+      - "8081:8080"
+    depends_on:
+      - controller
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+
+volumes:
+  redis_data:
+
+networks:
+  mirage-internal:
+    driver: bridge
+    internal: true
