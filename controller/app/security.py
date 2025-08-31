@@ -1,3 +1,5 @@
+from dotenv import load_dotenv
+load_dotenv()
 import os
 import hmac
 import hashlib
@@ -6,6 +8,8 @@ from typing import Optional
 
 def validate_api_key(api_key: str) -> bool:
     expected_key = os.getenv("CN_API_KEY")
+    print(f"DEBUG: Validating API Key: {api_key}")
+    print(f"DEBUG: Expected API Key: {expected_key}")
     if not expected_key or not api_key:
         return False
     return hmac.compare_digest(api_key, expected_key)

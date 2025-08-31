@@ -1,8 +1,12 @@
 from proxy_server import ProxyServer
+from dotenv import load_dotenv
+load_dotenv()
 import asyncio
 import logging
+
 import os
 import time
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("mirage-gateway")
@@ -12,8 +16,8 @@ async def main():
     logger.info("Waiting for controller initialization...")
     await asyncio.sleep(5)
     
-    gateway_host = os.getenv("GN_HOST", "0.0.0.0")
-    gateway_port = int(os.getenv("GN_PORT", 8080))
+    gateway_host = os.getenv("GN_HOST")
+    gateway_port = int(os.getenv("GN_PORT", 8082))
     
     server = ProxyServer()
     await server.start_server(gateway_host, gateway_port)

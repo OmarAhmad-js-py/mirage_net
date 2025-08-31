@@ -19,7 +19,7 @@ logger = logging.getLogger("mirage-controller")
 @app.post("/api/v1/peer/register")
 async def register_peer(peer_data: dict, x_api_key: str = Header(...)):
     if not validate_api_key(x_api_key):
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid API key")
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"Invalid API key ")
     
     try:
         peer_id = peer_data.get("peer_id")
@@ -93,4 +93,4 @@ async def network_status(x_api_key: str = Header(...)):
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080, log_level="info")
+    uvicorn.run(app, host="localhost", port=8081, log_level="info")

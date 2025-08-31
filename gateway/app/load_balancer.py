@@ -1,5 +1,7 @@
 import aiohttp
 import asyncio
+from dotenv import load_dotenv
+load_dotenv()
 import random
 import time
 from typing import Dict, List, Optional
@@ -22,8 +24,12 @@ class PeerHealth:
 class LoadAwareBalancer:
     def __init__(self):
         self.peer_health: Dict[str, PeerHealth] = {}
-        self.controller_url = f"http://{os.getenv('CN_HOST')}:{os.getenv('CN_PORT')}/api/v1/peer/list"
+        self.controller_url = f"http://{os.getenv('CN_HOST')}:{os.getenv('CN_PORT', 8082)}/api/v1/peer/list"
         self.api_key = os.getenv('CN_API_KEY')
+        
+        print(f"DEBUG: API Key loaded: {self.api_key is not None}")
+        print(f"DEBUG: Controller URL: {self.controller_url}")
+        
         self.update_interval = 30  # seconds
         self._update_task = None
 
